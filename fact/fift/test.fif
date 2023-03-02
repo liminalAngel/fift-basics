@@ -1,0 +1,32 @@
+variable items
+dictnew items ! // created items dictionary
+
+variable key
+-1 key ! // created key
+
+{ // b{10001}
+    <b // b{10001}, b
+        swap // b, b{10001}
+        s, // b'
+        key // b', p(box)
+        1+! // b'
+        key // b', p(box)
+        @ // b', key
+        items // b', key, p(box)
+        @ // b', key, items
+        64 // b', key, items, 64
+    b>udict!+ // items', -1
+    drop
+    items // items', p(box)
+    ! // stack is empty
+
+} : add-item
+
+b{10001} add-item
+
+<b
+    1 32 u,
+    now 64 u,
+    items @ dict,
+    123 32 u,
+b>
