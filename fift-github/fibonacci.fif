@@ -1,0 +1,5 @@
+{ 0 1 rot { 2dup + } swap times } : fibo
+
+7 fibo .  // prints 21 
+
+// P. S. I used this sequence: 1 2 3 5 8 13 21 34 ...

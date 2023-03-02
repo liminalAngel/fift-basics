@@ -1,0 +1,31 @@
+"TonUtil.fif" include
+
+variable items
+dictnew items ! // created items dictionary
+
+variable key
+-1 key ! // created key
+
+{
+   bl word // S
+   parse-smc-addr // wc addr bounce?
+   drop // wc addr
+   <b // wc addr b
+      -rot // b wc addr
+      Addr, // b'
+      key // b' p
+      1+! // b'
+      key // b' p
+      @ // b' key
+      items // b' key p
+      @ // b' key items
+      64 // b' key items 64
+   b>udict!+ // items' -1
+   drop // items'
+   items // items' p
+   ! // stack is empty, we pushed items' into items variable
+
+} : add-address
+
+add-address EQCDVAl8DeF0Lfzjv8_QUwh_rvaTaDK5qmuVygM26sEeuPnX
+
