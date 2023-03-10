@@ -1,0 +1,92 @@
+(int, int, slice) load_data() inline {
+    slice ds = get_data().begin_parse();
+    
+    return (
+        ds~load_uint(32),  ;; stored seqno
+        ds~load_uint(256),  ;; public key
+        ds~load_msg_addr()  ;; owner address
+    );
+}
+
+() save_data(int stored_seqno, int pubkey, slice owner_address) impure inline {
+    set_data(
+        begin_cell()
+        .store_uint(stored_seqno, 32)
+        .store_uint(pubkey, 256)
+        .store_slice(owner_address)
+        .end_cell()
+    );
+}
+
+() send_funds(slice to_address, int amount) impure {
+    cell msg = begin_cell()
+        .store_uint(0x18, 6) 
+        .store_slice(to_address) 
+        .store_grams(amount)
+        .store_uint(0, 107)
+      .end_cell(); 
+
+  send_raw_message(msg, 3); 
+}
+
+int balance() method_id {
+    var [balance, _] = get_balance();
+    return balance;
+}
+
+() recv_internal() impure {
+    ;; do nothing
+}
+
+() recv_external(slice in_msg) impure {
+
+    if (slice_empty?(in_msg)) {
+        return (); 
+    }
+
+    var signature = in_msg~load_bits(512);
+    slice message = in_msg;
+    int msg_seqno = message~load_uint(32);
+
+    (int stored_seqno, int pubkey, slice owner_address) = load_data();
+
+    throw_unless(101, msg_seqno == stored_seqno);
+    throw_unless(102, check_signature(slice_hash(in_msg), signature, pubkey));
+
+    accept_message();
+    message~touch();
+
+    int op = message~load_uint(32);
+
+    if (op == 1) { ;; change owner 
+        slice new_owner_address = message~load_msg_addr();
+
+        save_data(stored_seqno + 1, pubkey, new_owner_address);
+    } 
+
+    elseif (op == 2) { ;; send given amount of grams to owner 
+        int amount_to_send = message~load_grams();
+
+        throw_if(103, amount_to_send + 500000000 > balance());
+
+        send_funds(owner_address, amount_to_send);
+
+        save_data(stored_seqno + 1, pubkey, owner_address);
+    }
+    else {
+        throw(404);
+        ~strdump("Wrong op");
+    }
+}
+
+;; Getters
+
+int get_seqno() method_id {
+    (int stored_seqno, _, _) = load_data();
+    return stored_seqno;
+}
+
+int get_public_key() method_id {
+    (_, int pubkey, _) = load_data();
+    return pubkey;
+}

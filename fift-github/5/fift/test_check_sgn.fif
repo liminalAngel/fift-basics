@@ -1,0 +1,54 @@
+"TonUtil.fif" include
+"Asm.fif" include
+"compiled-smc.fif" include
+"common.fif" include
+
+variable owner_private_key
+variable owner_public_key
+
+"key.pk" file>B owner_private_key !
+owner_private_key @ priv>pub  owner_public_key !
+
+"Ef9Tj6fMJP-OqhAdhKXxq36DL-HYSzCc3-9O6UNzqsgPfYFX" constant owner_addr // S
+owner_addr $>smca 0= abort"Provide valid address!" // wc 256-bit addr flag -1
+drop
+2constant owner_raw
+
+<b 
+    0 32 u, 
+    owner_public_key @ B,
+    owner_raw Addr,
+
+b> storage !
+
+variable msg_sign
+variable result_msg
+variable signature
+variable exit_code
+
+<b 0 32 u, 2 32 u, 500000 Gram, b> msg_sign !
+
+msg_sign @ // c
+hashu // x
+owner_private_key @ // B'
+ed25519_sign_uint // B''
+signature !
+
+<b
+    signature @ B,
+    0 32 u,
+    2 32 u,
+b> <s result_msg !
+
+result_msg @ // fetched a message
+recv_external // -1
+code <s // smc-compiled-code (slice)
+storage @ // c4 (storage)
+c7
+runvmctx  // exit_code c'
+
+storage !
+exit_code !
+
+."Exit-code " exit_code @ . cr
+exit_code @ 102 - abort"Test failed"

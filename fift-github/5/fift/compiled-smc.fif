@@ -1,0 +1,288 @@
+"Asm.fif" include
+// automatically generated from `/home/user/.config/toncli/func-libs/error_codes.func` `/home/user/.config/toncli/func-libs/stdlib.func` `/home/user/.config/toncli/func-libs/math.func` `/home/user/fact/func/external.fc` 
+PROGRAM{
+  DECLPROC power
+  DECLPROC sqrt
+  DECLPROC avg
+  DECLPROC exp
+  DECLPROC log2
+  DECLPROC load_data
+  DECLPROC save_data
+  DECLPROC send_funds
+  104128 DECLMETHOD balance
+  DECLPROC recv_internal
+  DECLPROC recv_external
+  77871 DECLMETHOD get_seqno
+  78748 DECLMETHOD get_public_key
+  power PROCREF:<{
+    //  x exponent
+    OVER	//  x exponent x
+    0 EQINT	//  x exponent _3
+    IFJMP:<{	//  x exponent
+      2DROP	// 
+      0 PUSHINT	//  _4=0
+    }>	//  x exponent
+    DUP	//  x exponent exponent
+    0 EQINT	//  x exponent _6
+    IFJMP:<{	//  x exponent
+      2DROP	// 
+      1 PUSHINT	//  _7=1
+    }>	//  x exponent
+    OVER	//  x counter result
+    WHILE:<{
+      OVER	//  x counter result counter
+      1 GTINT	//  x counter result _11
+    }>DO<{	//  x counter result
+      s2 PUSH	//  x counter result x
+      MUL	//  x counter result
+      SWAP	//  x result counter
+      DEC	//  x result counter
+      SWAP	//  x counter result
+    }>	//  x counter result
+    2 1 BLKDROP2	//  result
+  }>
+  sqrt PROCREF:<{
+    //  x
+    DUP	//  x x
+    0 EQINT	//  x _2
+    IFJMP:<{	//  x
+      DROP	// 
+      0 PUSHINT	//  _3=0
+    }>	//  x
+    DUP	//  x x
+    4 LESSINT	//  x _5
+    IFJMP:<{	//  x
+      DROP	// 
+      1 PUSHINT	//  _6=1
+    }>	//  x
+    DUP	//  x x
+    INC	//  x _9
+    1 RSHIFT#	//  x z
+    OVER	//  x z y
+    WHILE:<{
+      2DUP	//  x z y z y
+      LESS	//  x z y _13
+    }>DO<{	//  x z y
+      DROP	//  x z
+      s0 s1 s0 PUSH3	//  x z y x z
+      DIV	//  x z y _14
+      ROT	//  x y _14 z
+      ADD	//  x y _15
+      1 RSHIFT#	//  x y z
+      SWAP	//  x z y
+    }>	//  x z y
+    2 1 BLKDROP2	//  y
+  }>
+  avg PROCREF:<{
+    //  x y
+    ADD	//  _2
+    1 RSHIFT#	//  _4
+  }>
+  exp PROCREF:<{
+    //  x
+    DUP	//  x x
+    -1 GTINT	//  x _2
+    IF:<{	//  x
+      POW2	//  _3
+    }>ELSE<{	//  x
+      1 PUSHINT	//  x _6=1
+      SWAP	//  _6=1 x
+      NEGATE	//  _6=1 _8
+      RSHIFT	//  _3
+    }>
+  }>
+  log2 PROCREF:<{
+    //  x
+    0 PUSHINT	//  x n=0
+    7 PUSHPOW2	//  x n=0 _3=128
+    exp INLINECALLDICT	//  x n=0 _4
+    s2 s(-1) PUXC	//  x n=0 x _4
+    GEQ	//  x n=0 _5
+    IF:<{	//  x n=0
+      DROP	//  x
+      128 RSHIFT#	//  x
+      7 PUSHPOW2	//  x n
+    }>	//  x n
+    64 PUSHINT	//  x n _10=64
+    exp INLINECALLDICT	//  x n _11
+    s2 s(-1) PUXC	//  x n x _11
+    GEQ	//  x n _12
+    IF:<{	//  x n
+      SWAP	//  n x
+      64 RSHIFT#	//  n x
+      SWAP	//  x n
+      64 ADDCONST	//  x n
+    }>	//  x n
+    32 PUSHINT	//  x n _17=32
+    exp INLINECALLDICT	//  x n _18
+    s2 s(-1) PUXC	//  x n x _18
+    GEQ	//  x n _19
+    IF:<{	//  x n
+      SWAP	//  n x
+      32 RSHIFT#	//  n x
+      SWAP	//  x n
+      32 ADDCONST	//  x n
+    }>	//  x n
+    16 PUSHINT	//  x n _24=16
+    exp INLINECALLDICT	//  x n _25
+    s2 s(-1) PUXC	//  x n x _25
+    GEQ	//  x n _26
+    IF:<{	//  x n
+      SWAP	//  n x
+      16 RSHIFT#	//  n x
+      SWAP	//  x n
+      16 ADDCONST	//  x n
+    }>	//  x n
+    8 PUSHINT	//  x n _31=8
+    exp INLINECALLDICT	//  x n _32
+    s2 s(-1) PUXC	//  x n x _32
+    GEQ	//  x n _33
+    IF:<{	//  x n
+      SWAP	//  n x
+      8 RSHIFT#	//  n x
+      SWAP	//  x n
+      8 ADDCONST	//  x n
+    }>	//  x n
+    4 PUSHINT	//  x n _38=4
+    exp INLINECALLDICT	//  x n _39
+    s2 s(-1) PUXC	//  x n x _39
+    GEQ	//  x n _40
+    IF:<{	//  x n
+      SWAP	//  n x
+      4 RSHIFT#	//  n x
+      SWAP	//  x n
+      4 ADDCONST	//  x n
+    }>	//  x n
+    2 PUSHINT	//  x n _45=2
+    exp INLINECALLDICT	//  x n _46
+    s2 s(-1) PUXC	//  x n x _46
+    GEQ	//  x n _47
+    IF:<{	//  x n
+      SWAP	//  n x
+      2 RSHIFT#	//  n x
+      SWAP	//  x n
+      2 ADDCONST	//  x n
+    }>	//  x n
+    1 PUSHINT	//  x n _52=1
+    exp INLINECALLDICT	//  x n _53
+    s1 s2 XCHG	//  n x _53
+    GEQ	//  n _54
+    IF:<{	//  n
+      INC	//  n
+    }>	//  n
+  }>
+  load_data PROCINLINE:<{
+    // 
+    c4 PUSH	//  _1
+    CTOS	//  ds
+    32 LDU	//  _3 ds
+    256 LDU	//  _3 _6 ds
+    LDMSGADDR	//  _3 _6 _16 _15
+    DROP	//  _3 _6 _9
+  }>
+  save_data PROCINLINE:<{
+    //  stored_seqno pubkey owner_address
+    s0 s2 XCHG
+    NEWC	//  owner_address pubkey stored_seqno _3
+    32 STU	//  owner_address pubkey _5
+    256 STU	//  owner_address _7
+    SWAP	//  _7 owner_address
+    STSLICER	//  _8
+    ENDC	//  _9
+    c4 POP
+  }>
+  send_funds PROC:<{
+    //  to_address amount
+    0 PUSHINT	//  to_address amount _3=0
+    24 PUSHINT	//  to_address amount _3=0 _4=24
+    NEWC	//  to_address amount _3=0 _4=24 _5
+    6 STU	//  to_address amount _3=0 _7
+    s0 s3 XCHG2	//  _3=0 amount _7 to_address
+    STSLICER	//  _3=0 amount _8
+    SWAP	//  _3=0 _8 amount
+    STGRAMS	//  _3=0 _9
+    107 STU	//  _11
+    ENDC	//  msg
+    3 PUSHINT	//  msg _13=3
+    SENDRAWMSG
+  }>
+  balance PROC:<{
+    // 
+    BALANCE	//  _2
+    UNPAIR	//  _4 _5
+    DROP	//  balance
+  }>
+  recv_internal PROC:<{
+    // 
+  }>
+  recv_external PROC:<{
+    //  in_msg
+    DUP	//  in_msg in_msg
+    SEMPTY	//  in_msg _1
+    IFJMP:<{	//  in_msg
+      DROP	// 
+    }>	//  in_msg
+    9 PUSHPOW2	//  in_msg _4=512
+    LDSLICEX	//  signature in_msg
+    DUP	//  signature in_msg message
+    32 LDU	//  signature in_msg msg_seqno message
+    load_data INLINECALLDICT	//  signature in_msg msg_seqno message stored_seqno pubkey owner_address
+    s4 s2 XCPU	//  signature in_msg owner_address message stored_seqno pubkey msg_seqno stored_seqno
+    EQUAL	//  signature in_msg owner_address message stored_seqno pubkey _16
+    101 THROWIFNOT
+    s0 s4 XCHG	//  signature pubkey owner_address message stored_seqno in_msg
+    HASHSU	//  signature pubkey owner_address message stored_seqno _19
+    s0 s5 s4 XC2PU	//  stored_seqno pubkey owner_address message _19 signature pubkey
+    CHKSIGNU	//  stored_seqno pubkey owner_address message _20
+    102 THROWIFNOT
+    ACCEPT	//  stored_seqno pubkey owner_address message
+    32 LDU	//  stored_seqno pubkey owner_address op message
+    OVER	//  stored_seqno pubkey owner_address op message op
+    1 EQINT	//  stored_seqno pubkey owner_address op message _30
+    IF:<{	//  stored_seqno pubkey owner_address op message
+      2 1 BLKDROP2	//  stored_seqno pubkey message
+      LDMSGADDR	//  stored_seqno pubkey _66 _65
+      DROP	//  stored_seqno pubkey new_owner_address
+      s0 s2 XCHG	//  new_owner_address pubkey stored_seqno
+      INC	//  new_owner_address pubkey _35
+      s0 s2 XCHG	//  _35 pubkey new_owner_address
+      save_data INLINECALLDICT
+    }>ELSE<{	//  stored_seqno pubkey owner_address op message
+      SWAP	//  stored_seqno pubkey owner_address message op
+      2 EQINT	//  stored_seqno pubkey owner_address message _38
+      IF:<{	//  stored_seqno pubkey owner_address message
+        LDGRAMS	//  stored_seqno pubkey owner_address _68 _67
+        DROP	//  stored_seqno pubkey owner_address amount_to_send
+        DUP
+        500000000 PUSHINT	//  stored_seqno pubkey owner_address amount_to_send amount_to_send _43=500000000
+        ADD	//  stored_seqno pubkey owner_address amount_to_send _44
+        balance CALLDICT	//  stored_seqno pubkey owner_address amount_to_send _44 _45
+        GREATER	//  stored_seqno pubkey owner_address amount_to_send _46
+        103 THROWIF
+        s1 s(-1) PUXC	//  stored_seqno pubkey owner_address owner_address amount_to_send
+        send_funds CALLDICT
+        s0 s2 XCHG	//  owner_address pubkey stored_seqno
+        INC	//  owner_address pubkey _50
+        s0 s2 XCHG	//  _50 pubkey owner_address
+        save_data INLINECALLDICT
+      }>ELSE<{	//  stored_seqno pubkey owner_address message
+        4 BLKDROP	// 
+        404 THROW
+        x{57726f6e67206f70} PUSHSLICE	//  _54
+        STRDUMP	//  _55
+        DROP	// 
+      }>
+    }>
+  }>
+  get_seqno PROC:<{
+    // 
+    load_data INLINECALLDICT	//  _4 _5 _6
+    2DROP	//  stored_seqno
+  }>
+  get_public_key PROC:<{
+    // 
+    load_data INLINECALLDICT	//  _4 _5 _6
+    DROP
+    NIP	//  pubkey
+  }>
+}END>c constant code
