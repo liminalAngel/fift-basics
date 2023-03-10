@@ -1,0 +1,24 @@
+"TonUtil.fif" include
+"Asm.fif" include
+
+variable message
+<b b> <s message !
+
+variable storage 
+<b b> storage ! 
+
+-1 constant recv_external
+
+null constant global_config
+
+0x076ef1ea // magic
+0  // actions
+0  // msg_sents
+now  // unix_time
+1  // block_lt
+1  // trans_lt
+666  // rand_seed
+1000000000 null pair  // balance_remaining
+null  // myself
+global_config  // global_config
+10 tuple 1 tuple constant c7  // save as c7 cell
