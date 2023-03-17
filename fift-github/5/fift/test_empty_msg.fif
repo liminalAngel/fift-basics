@@ -3,18 +3,20 @@
 "compiled-smc.fif" include
 "common.fif" include
 
-message @ // fetched a message
-recv_external // -1
-code <s // smc-compiled-code (slice)
-storage @ // c4 (storage)
+message @
+recv_external
+code <s
+storage @ 
 c7
-runvmctx // x(exit-code) c' (modified c4)
+runvmctx  // exit_code c4'
 
 variable exit_code
 
-drop // x
+drop // exit_code 
 
 exit_code !
-
-."Exit-code " exit_code @ . cr 
+."Exit code " exit_code @ . cr
 exit_code @ 0 - abort"Test failed!"
+
+
+

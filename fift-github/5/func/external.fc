@@ -90,3 +90,8 @@ int get_public_key() method_id {
     (_, int pubkey, _) = load_data();
     return pubkey;
 }
+
+;; 1. Test whether contract can handle empty messages
+;; 2. Test whether contract throws an exception in case of wrong seqno
+;; 3. Test signature
+;; 4. Test whether contract throws an exception in case of withdrawing more funds that allowed

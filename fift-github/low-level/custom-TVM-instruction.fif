@@ -1,0 +1,20 @@
+"Asm.fif" include
+
+<{ 
+    1 INT 
+    SWAP 
+    DUP 
+
+        CONT:<{ 
+            TUCK MUL SWAP DEC 
+        }> 
+
+    REPEAT 
+    DROP 
+}>s csr.
+
+// 5 x{7101209466A801A5E430} runvmcode drop .s
+
+x{7101209466A801A5E430} @Defop FACTORIAL
+
+// (int) fact(int num) asm "FACTORIAL" // in your FunC smc

@@ -1,5 +1,5 @@
 "Asm.fif" include
-// automatically generated from `/home/user/.config/toncli/func-libs/error_codes.func` `/home/user/.config/toncli/func-libs/stdlib.func` `/home/user/.config/toncli/func-libs/math.func` `/home/user/fact/func/external.fc` 
+// automatically generated from `/home/user/.config/toncli/func-libs/error_codes.func` `/home/user/.config/toncli/func-libs/stdlib.func` `/home/user/.config/toncli/func-libs/math.func` `/home/user/fift-github/5/func/external.fc` 
 PROGRAM{
   DECLPROC power
   DECLPROC sqrt
